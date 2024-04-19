@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=, initial-scale=" />
+  <title>CineCritique</title>
+</head>
+
+<body>
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="main.html"><b>Home</b></a>
+    <a href="profile.html"><b>Profile</b></a>
+    <a href="post.html"><b>Posts</b></a>
+    <a href="settings.html"><b>Settings</b></a>
+    <a href="index.html"><b>Sign Out</b></a>
+  </div>
+
+  <nav class="navbar">
+    <button class="openbtn" onclick="openNav()">&#9776;</button>
+    <ul>
+      <li><a href="post.html" class="post"><b>&#9993 What Are People Saying?</b></a></li>
+      <li><a href="profile.html" class="profile"><b>&#128100Profile</b></a></li>
+    </ul>
+    <input class="submit" type="search" placeholder="Looking for something?" aria-label="Search"
+      oninput="searchMovies(this.value)">
+  </nav>
+
+  <div class="header">
+    <h1>Select a Movie to Review</h1>
+    <div class="dropdown-container">
+      <span>Filter by Genre:</span>
+      <div class="dropdown">
+        <button class="dropbtn" id="dropbtn">Select Genre</button>
+        <div class="dropdown-content" id="genre-dropdown">
+          <a href="#" data-genre-id="28">Action</a>
+          <a href="#" data-genre-id="35">Comedy</a>
+          <a href="#" data-genre-id="27">Horror</a>
+          <a href="#" data-genre-id="18">Drama</a>
+          <a href="#" data-genre-id="14">Fantasy</a>
+          <a href="#" data-genre-id="10751">Family</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="movies-container" class="container">
+
+  </div>
+</body>
+
+<style>
+  body {
+    margin: 0;
+    font-family: cochin;
+    background-color: #fffefc;
+  }
+
+  .navbar {
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #a26769;
+    margin-bottom: 0;
+  }
+
+  .navbar #main {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .openbtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 20px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    font-size: 28px;
+  }
+
+  li a {
+    color: white;
+    text-decoration: none;
+    padding: 25px 20px 20px 25px;
+    margin-right: 50px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .navbar .submit {
+    margin-left: auto;
+    font-size: 20px;
+    padding-right: 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  h1 {
+    font-family: cochin;
+    font-weight: bolder;
+    font-size: 35px;
+    color: #6d2e46;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #ece2d0;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+  }
+
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    padding: 10px 15px;
+    margin-right: 35px;
+    border: none;
+  }
+
+  .openbtn:hover,
+  .post:hover,
+  .profile:hover {
+    background-color: #4f2032;
+  }
+
+  #main {
+    transition: margin-left .5s;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .movie {
+    width: calc(15% - 20px);
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 14px 18px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 20px;
+    text-overflow: none;
+  }
+
+  .movie:hover {
+    background-color: #d5b9b2;
+  }
+
+  .movie img {
+    width: 100%;
+    height: 400px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .movie h2 {
+    margin: 10px;
+    font-size: 1.2em;
+  }
+
+  .movie p {
+    margin: 10px 0;
+    max-height: 100px;
+    text-overflow: ellipsis;
+  }
+
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .dropdown-container {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    /* Adjust as needed */
+  }
+
+  .dropdown {
+    margin-left: 20px;
+  }
+
+  .dropbtn {
+    background-color: #a26769;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .dropbtn:hover {
+    background-color: #6e4546;
+  }
+
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    z-index: 1;
+    transition: background-color 0.3s ease;
+  }
+
+  .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+
+  .dropdown-content a:hover {
+    background-color: #ddd;
+  }
+
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+
+  @media screen and (max-height: 450px) {
+    .sidebar {
+      padding-top: 15px;
+    }
+
+    .sidebar a {
+      font-size: 18px;
+    }
+  }
+</style>
+
+<script>
+  function openNav() {
+    document.getElementById("sidebar").style.width = "250px";
+  }
+
+  function closeNav() {
+    document.getElementById("sidebar").style.width = "0";
+  }
+
+  let previousQuery = '';
+  let allMovies = [];
+
+  function searchMovies(query) {
+    const movieCards = document.querySelectorAll('.movie');
+    const container = document.getElementById('movies-container');
+
+    if (previousQuery.includes(query)) {
+      movieCards.forEach(card => {
+        card.style.display = 'block';
+      });
+    }
+
+    movieCards.forEach(card => {
+      const title = card.querySelector('h2').textContent.trim().toLowerCase();
+      if (title.includes(query.toLowerCase())) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    previousQuery = query;
+
+    if (query === '') {
+      movieCards.forEach(card => {
+        card.style.display = 'block';
+      });
+    }
+  }
+
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMTYyNjM5OWE4YTY5YjlkZjM2NTY4ZjIwZWExNTg4NiIsInN1YiI6IjY2MTkxYmY3ZjlhYTQ3MDE0YTMzZWJmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BO10OFsgnRYsNlP2VY7Ef5LSwSBjnglLO5nJzdTXMAs'
+    }
+  };
+
+  fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc', options)
+    .then(response => response.json())
+    .then(response => {
+      const moviesContainer = document.getElementById('movies-container');
+
+      response.results.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('movie');
+
+        movieElement.dataset.movieData = JSON.stringify(movie);
+
+        const posterElement = document.createElement('img');
+        posterElement.src = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+        posterElement.alt = movie.title + ' Poster';
+
+        const titleElement = document.createElement('h2');
+        titleElement.textContent = movie.title;
+
+        movieElement.appendChild(posterElement);
+        movieElement.appendChild(titleElement);
+
+        movieElement.addEventListener('click', function () {
+          const movieData = JSON.parse(this.dataset.movieData);
+          localStorage.setItem('selectedMovie', JSON.stringify(movieData));
+          window.location.href = 'write-review.html';
+        });
+
+        moviesContainer.appendChild(movieElement);
+      });
+    })
+    .catch(err => console.error(err));
+  document.addEventListener('DOMContentLoaded', function () {
+    const genreDropdown = document.getElementById('genre-dropdown');
+
+    genreDropdown.addEventListener('click', function (event) {
+      if (event.target.tagName === 'A') {
+        const genreId = event.target.dataset.genreId;
+        filterMoviesByGenre(genreId);
+      }
+    });
+
+    function filterMoviesByGenre(genreId) {
+      const moviesContainer = document.getElementById('movies-container');
+
+      moviesContainer.innerHTML = '';
+
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwMTYyNjM5OWE4YTY5YjlkZjM2NTY4ZjIwZWExNTg4NiIsInN1YiI6IjY2MTkxYmY3ZjlhYTQ3MDE0YTMzZWJmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.BO10OFsgnRYsNlP2VY7Ef5LSwSBjnglLO5nJzdTXMAs'
+        }
+      };
+
+      fetch(`https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`, options)
+        .then(response => response.json())
+        .then(response => {
+          response.results.forEach(movie => {
+            const movieElement = document.createElement('div');
+            movieElement.classList.add('movie');
+
+            const posterElement = document.createElement('img');
+            posterElement.src = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+            posterElement.alt = movie.title + ' Poster';
+
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = movie.title;
+
+            const overviewElement = document.createElement('p');
+            overviewElement.textContent = movie.overview;
+
+            const releaseDateElement = document.createElement('p');
+            releaseDateElement.textContent = 'Release Date: ' + movie.release_date;
+
+            const ratingElement = document.createElement('p');
+            ratingElement.textContent = 'Rating: ' + movie.vote_average;
+
+
+            movieElement.appendChild(posterElement);
+            movieElement.appendChild(titleElement);
+            movieElement.appendChild(overviewElement);
+            movieElement.appendChild(releaseDateElement);
+            movieElement.appendChild(ratingElement);
+
+            moviesContainer.appendChild(movieElement);
+          });
+        })
+        .catch(err => console.error(err));
+    }
+  });
+</script>
+</html>

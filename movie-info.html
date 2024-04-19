@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineCritique - Movie Info</title>
+  <style>
+    .movie-info {
+      
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex; 
+      flex-direction: row; 
+      align-items: flex-start; 
+    }
+
+    .movie-info img {
+      width: 50%; 
+      height: auto;
+      border-radius: 8px;
+      margin-right: 20px; 
+    }
+
+    .movie-info h2 {
+      font-family: cochin;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .movie-info p {
+      margin-bottom: 10px; 
+      font-family: cochin;
+    }
+
+    .write-review-btn {
+      background-color: #a26769;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: auto; 
+      margin-bottom: 5px;
+    }
+
+    .write-review-btn:hover {
+      background-color: #6e4546;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="movie-info">
+    <img id="movie-poster" src="" alt="Movie Poster" />
+    <div>
+      <h2 id="movie-title"></h2>
+      <p id="movie-overview"></p>
+      <p id="movie-release-date"></p>
+      <p id="movie-rating"></p>
+      <button class="write-review-btn">Write a Review</button>
+      <button class="write-review-btn" id="add-to-watchlist">Add to Watchlist</button>
+      <button id="favorite-button">&#x2764;Favorite</button>
+    </div>
+  </div>
+
+  <script>
+    const movieData = JSON.parse(localStorage.getItem('selectedMovie'));
+
+    if (movieData) {
+      const {poster_path, title, overview, release_date, vote_average} = movieData;
+      document.getElementById('movie-poster').src = 'https://image.tmdb.org/t/p/w500' + poster_path;
+      document.getElementById('movie-poster').alt = title + ' Poster';
+
+      document.getElementById('movie-title').textContent = title;
+      document.getElementById('movie-overview').textContent = overview;
+      document.getElementById('movie-release-date').textContent = 'Release Date: ' + release_date;
+      document.getElementById('movie-rating').textContent = 'Rating: ' + vote_average;
+    }
+
+    document.querySelector('.write-review-btn').addEventListener('click', function () {
+      window.location.href = 'write-review.html';
+    });
+
+    document.getElementById('add-to-watchlist').addEventListener('click', function () {
+      let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+
+      const existingMovie = watchlist.find(movie => movie.title === movieData.title);
+      if (!existingMovie) {
+        watchlist.push(movieData);
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        alert('Movie added to watchlist!');
+
+        window.location.href = 'profile.html';
+      } else {
+        alert('Movie is already in your watchlist!');
+      }
+    });
+
+    document.getElementById('favorite-button').addEventListener('click', function () {
+      let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+      const existingIndex = favorites.findIndex(movie => movie.title === movieData.title);
+      if (existingIndex === -1) {
+        favorites.push(movieData);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Movie added to favorites!');
+      } else {
+        favorites.splice(existingIndex, 1);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Movie removed from favorites!');
+      }
+    });
+  </script>
+</body>
+
+</html>

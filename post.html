@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=, initial-scale=" />
+  <title>CineCritique</title>
+</head>
+
+<div id="sidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="main.html"><b>Home</b></a>
+  <a href="profile.html"><b>Profile</b></a>
+  <a href="select-movie.html"><b>Write A Review</b></a>
+  <a href="settings.html"><b>Settings</b></a>
+  <a href="index.html"><b>Sign Out</b></a>
+</div>
+
+<nav class="navbar">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
+  <ul>
+    <li><a href="main.html" class="home"><b>&#127968 Home</b></a></li>
+    <li><a href="select-movie.html" class="review"><b>&#9993 Make A Post</b></a></li>
+    <li><a href="profile.html" class="profile"><b>&#128100Profile</b></a></li>
+  </ul>
+
+  <div class="logo-container">
+    <img src="output-onlinepngtools.png">
+  </div>
+
+</nav>
+
+<body>
+  <h1>Movie Reviews from Other Users</h1>
+  <div id="reviews" class="reviews-container">
+
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: cochin;
+      background-color: #fffefc;
+    }
+
+    .navbar {
+      display: flex;
+      overflow: hidden;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #a26769;
+      margin-bottom: 0;
+      padding: 10px;
+    }
+
+    .navbar .openbtn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      margin-right: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      font-size: 28px;
+    }
+
+    li a {
+      color: white;
+      text-decoration: none;
+      padding: 25px 20px 20px 25px;
+      margin-right: 50px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-height: 50px;
+      width: 600px;
+     }
+
+    .logo-container img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #ece2d0;
+      overflow-x: hidden;
+      padding-top: 60px;
+      transition: 0.5s;
+    }
+
+    .sidebar a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: black;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    .sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+      padding: 10px 15px;
+      margin-right: 35px;
+      border: none;
+    }
+
+    .openbtn:hover,
+    .home:hover,
+    .review:hover,
+    .profile:hover {
+      background-color: #4f2032;
+    }
+
+    .reviews-container {
+      margin-top: 20px;
+      background-color: white;
+    }
+
+    .review-card {
+      padding: 15px;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+
+    .review-card h3 {
+      background-color: #d5b9b2;
+      color: #fff;
+      padding: 10px;
+      margin: -15px -15px 15px -15px;
+    }
+
+    .review-card h5 {
+      font-weight: bolder;
+    }
+
+    .review-card p {
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+
+    .review-card button {
+      background-color: #b59c96;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .review-card button:hover {
+      background-color: #917d79;
+    }
+  </style>
+
+  <script>
+    function openNav() {
+      document.getElementById("sidebar").style.width = "250px";
+      
+    }
+
+    function closeNav() {
+      document.getElementById("sidebar").style.width = "0";
+    }
+
+    async function fetchMovieReviews() {
+      const apiKey = 'cfWLsIIlYTxyjIqSVziQJ4tZrBnvGUYH';
+      const url = `https://api.nytimes.com/svc/search/v2/articlesearch.json?fq=section_name%3A"Movies"%20AND%20type_of_material%3A"Review"&api-key=${apiKey}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const reviewsContainer = document.getElementById('reviews');
+        if (data.response && data.response.docs && data.response.docs.length > 0) {
+          data.response.docs.forEach(review => {
+            const reviewId = review._id;
+            const likeCount = parseInt(localStorage.getItem(`likeCount_${reviewId}`)) || 0;
+            const dislikeCount = parseInt(localStorage.getItem(`dislikeCount_${reviewId}`)) || 0;
+
+            const reviewCard = document.createElement('div');
+            reviewCard.classList.add('review-card');
+            reviewCard.innerHTML = `
+                        <h3>${review.headline.main}</h3>
+                        <h5>${review.byline.original} - ${new Date(review.pub_date).toLocaleDateString()}</h5>
+                        <p>${review.snippet}</p>
+                        <button onclick="likeReview('${reviewId}')">&#128077</button>
+                        <span id="likeCount_${reviewId}">${likeCount}</span>
+                        <button onclick="dislikeReview('${reviewId}')">&#128078</button>
+                        <span id="dislikeCount_${reviewId}">${dislikeCount}</span>
+                        <hr>
+                    `;
+            reviewsContainer.appendChild(reviewCard);
+          });
+        } else {
+          reviewsContainer.textContent = 'No reviews found.';
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    function likeReview(reviewId) {
+      const likeCountElement = document.getElementById(`likeCount_${reviewId}`);
+      let likeCount = parseInt(likeCountElement.textContent);
+      likeCount++;
+      likeCountElement.textContent = likeCount;
+
+      localStorage.setItem(`likeCount_${reviewId}`, likeCount);
+    }
+
+    function dislikeReview(reviewId) {
+      const dislikeCountElement = document.getElementById(`dislikeCount_${reviewId}`);
+      let dislikeCount = parseInt(dislikeCountElement.textContent);
+      dislikeCount++;
+      dislikeCountElement.textContent = dislikeCount;
+
+      localStorage.setItem(`dislikeCount_${reviewId}`, dislikeCount);
+    }
+
+    window.onload = fetchMovieReviews;
+
+  </script>
+</body>
+
+</html>

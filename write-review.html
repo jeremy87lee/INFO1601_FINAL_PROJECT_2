@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Write a Review</title>
+</head>
+
+<body>
+  <div id="sidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="profile.html"><b>Profile</b></a>
+    <a href="post.html"><b>Posts</b></a>
+    <a href="settings.html"><b>Settings</b></a>
+    <a href="index.html"><b>Sign Out</b></a>
+  </div>
+
+  <nav class="navbar">
+    <button class="openbtn" onclick="openNav()">&#9776;</button>
+    <ul>
+      <li><a href="main.html" class="homelink"><b>&#127968 Home</b></a></li>
+      <li><a href="post.html" class="reviewlink"><b>&#9993 What Are Others Saying?</b></a></li>
+    </ul>
+
+    <div class="logo-container">
+      <img src="output-onlinepngtools.png">
+    </div>
+
+  </nav>
+
+  <div class="container">
+    <h1>Write a Review</h1>
+    <form id="review-form">
+      <label for="review">What's your review? You'll be able to add a star rating for it on your profile!</label><br>
+      <textarea id="review" name="review" rows="4" cols="50"></textarea><br>
+
+      <input type="submit" value="Submit Review">
+    </form>
+  </div>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: cochin;
+      background-color: #fffefc;
+    }
+
+    .navbar {
+      display: flex;
+      overflow: hidden;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #a26769;
+      margin-bottom: 0;
+    }
+
+    .navbar #main {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .openbtn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      margin-right: 20px;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      display: inline-block;
+      font-size: 28px;
+    }
+
+    li a {
+      color: white;
+      text-decoration: none;
+      padding: 25px 20px 20px 25px;
+      margin-right: 50px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    h1 {
+      font-family: cochin;
+      font-weight: bolder;
+      font-size: 35px;
+      color: #6d2e46;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      margin-bottom: 20px;
+
+    }
+
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-height: 50px;
+      width: 600px;
+    }
+
+    .logo-container img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #ece2d0;
+      overflow-x: hidden;
+      padding-top: 60px;
+      transition: 0.5s;
+    }
+
+    .sidebar a {
+      padding: 8px 8px 8px 32px;
+      text-decoration: none;
+      font-size: 25px;
+      color: black;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .sidebar a:hover {
+      color: #f1f1f1;
+    }
+
+    .sidebar .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    .openbtn {
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+      padding: 10px 15px;
+      margin-right: 35px;
+      border: none;
+    }
+
+    .openbtn:hover {
+      background-color: #4f2032;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      align-content: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      justify-content: center;
+      align-items: center;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+
+    input[type="submit"] {
+      background-color: #a26769;
+      color: white;
+      border: none;
+      text-align: center;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #6e4546;
+    }
+
+    .homelink:hover,
+    .reviewlink:hover {
+      background-color: #4f2032;
+    }
+  </style>
+  <script>
+    function openNav() {
+      document.getElementById("sidebar").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("sidebar").style.width = "0";
+    }
+
+    document.getElementById('review-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const review = document.getElementById('review').value;
+      const movieName = JSON.parse(localStorage.getItem('selectedMovie')).title;
+      const existingReviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      existingReviews.push({movieName: movieName, review: review});
+      localStorage.setItem('reviews', JSON.stringify(existingReviews));
+
+      window.location.href = 'profile.html';
+    });
+
+
+  </script>
+</body>
+
+</html>

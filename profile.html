@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=, initial-scale=" />
+  <title>CineCritique</title>
+</head>
+<style>
+  body {
+    margin: 0;
+    font-family: cochin;
+    background-color: #fffefc;
+  }
+
+  .navbar {
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #a26769;
+    margin-bottom: 0;
+  }
+
+  .navbar #main {
+    display: flex;
+    align-items: center;
+  }
+
+  .navbar .openbtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 20px;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-block;
+    font-size: 28px;
+  }
+
+  li a {
+    color: white;
+    text-decoration: none;
+    padding: 25px 20px 20px 25px;
+    margin-right: 50px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 50px;
+    width: 600px;
+  }
+
+  .logo-container img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+
+  .sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #ece2d0;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+  }
+
+  .sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+    transition: 0.3s;
+  }
+
+  .sidebar a:hover {
+    color: #f1f1f1;
+  }
+
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+
+  .openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    padding: 10px 15px;
+    margin-right: 35px;
+    border: none;
+  }
+
+  .openbtn:hover {
+    background-color: #4f2032;
+  }
+
+  .homelink:hover,
+  .reviewlink:hover {
+    background-color: #4f2032;
+  }
+
+  .star {
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .star:hover,
+  .star.active {
+    color: gold;
+  }
+
+  .review-item {
+    background-color: #edecdf;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .review-item h3 {
+    color: black;
+    text-decoration: underline;
+  }
+
+  .review-item p {
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #d5b9b2;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+  }
+
+  .profile-name {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  .container2,
+  .container3 {
+    max-width: 800px;
+    margin: 20px auto;
+  }
+
+  .movie-list,
+  .favorites {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 20px;
+  }
+
+  .movie-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .movie-item img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .movie-item h3 {
+    margin: 0;
+    font-size: 16px;
+    text-align: center;
+  }
+</style>
+
+<div id="sidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="main.html"><b>Home</b></a>
+  <a href="post.html"><b>Posts</b></a>
+  <a href="settings.html"><b>Settings</b></a>
+  <a href="index.html"><b>Sign Out</b></a>
+</div>
+
+<nav class="navbar">
+  <button class="openbtn" onclick="openNav()">&#9776;</button>
+  <ul>
+    <li><a href="main.html" class="homelink"><b>&#127968 Home</b></a></li>
+    <li><a href="post.html" class="reviewlink"><b>&#9993 What Are Others Saying?</b></a></li>
+  </ul>
+
+  <div class="logo-container">
+    <img src="output-onlinepngtools.png">
+  </div>
+
+</nav>
+
+<body>
+
+  <div class="container">
+    <div class="profile-header">
+      <div class="profile-name" id="profile-username">
+        <h3>Watch anything interesting lately, <span id="username"></span>?
+        </h3>
+      </div>
+
+      <div class="profile-password">
+        <h5>Oh, by the way, your password is:
+          <span id="profile-password"></span>
+        </h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="movie-info">
+
+  </div>
+
+  <div class="review-section">
+    <h2>Reviews You've Made</h2>
+    <div id="user-reviews"></div>
+  </div>
+
+  <h1>My Watchlist</h1>
+
+  <div class="container2">
+    <div id="watchlist" class="movie-list">
+
+    </div>
+  </div>
+
+  <h2>Favorite Movies</h2>
+
+  <div class="container3">
+    <div id="favorite-movies" class="favorites"></div>
+
+  </div>
+
+  <script>
+
+    function openNav() {
+      document.getElementById("sidebar").style.width = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("sidebar").style.width = "0";
+    }
+
+    const username = localStorage.getItem('username');
+    const password = localStorage.getItem('password');
+
+    document.getElementById('username').textContent = username;
+    document.getElementById('profile-password').textContent = password.replace(/.{1}/g, '*');
+
+    const movieData = JSON.parse(localStorage.getItem('selectedMovie'));
+
+    function getStarRatingHTML(rating) {
+      const maxRating = 5;
+      let starHTML = '';
+      for (let i = 1; i <= maxRating; i++) {
+        if (i <= rating) {
+          starHTML += `<span class="star active" data-rating="${i}">&#9733;</span>`;
+        } else {
+          starHTML += `<span class="star" data-rating="${i}">&#9733;</span>`;
+        }
+      }
+      return starHTML;
+    }
+
+    if (movieData) {
+
+      let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+      const userReviewsContainer = document.getElementById('user-reviews');
+
+      if (reviews.length > 0) {
+        reviews.forEach((review, index) => {
+          if (review.movieName && review.review) {
+            const reviewElement = document.createElement('div');
+            reviewElement.classList.add('review-item');
+            const starRatingHTML = getStarRatingHTML(review.rating);
+            reviewElement.innerHTML = `
+                <h3>${review.movieName}</h3>
+                <div class="star-rating">${starRatingHTML}</div>
+                <p>${review.review}</p>
+              `;
+            userReviewsContainer.appendChild(reviewElement);
+
+            const stars = reviewElement.querySelectorAll('.star');
+            stars.forEach(star => {
+              star.addEventListener('click', function () {
+                const rating = parseInt(this.dataset.rating);
+                stars.forEach(s => {
+                  s.classList.remove('active');
+                });
+                for (let i = 0; i < rating; i++) {
+                  stars[i].classList.add('active');
+                }
+                reviews[index].rating = rating;
+                localStorage.setItem('reviews', JSON.stringify(reviews));
+              });
+            });
+          }
+        });
+      } else {
+        userReviewsContainer.textContent = 'No reviews available.';
+      }
+    }
+
+    const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+    const watchlistContainer = document.getElementById('watchlist');
+
+    if (watchlist.length > 0) {
+      watchlist.forEach(movie => {
+        const movieItem = document.createElement('div');
+        movieItem.classList.add('movie-item');
+        movieItem.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title} Poster" />
+            <h3>${movie.title}</h3>
+          `;
+        watchlistContainer.appendChild(movieItem);
+      });
+    } else {
+      watchlistContainer.textContent = 'Your watchlist is empty.';
+    }
+
+    const favoriteMovies = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    const favoriteMoviesContainer = document.getElementById('favorite-movies');
+
+    if (favoriteMovies.length > 0) {
+      favoriteMovies.forEach(movie => {
+        const movieItem = document.createElement('div');
+        movieItem.classList.add('movie-item');
+        movieItem.innerHTML = `
+            <img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}" alt="${movie.title} Poster" />
+            <h3>${movie.title}</h3>
+          `;
+        favoriteMoviesContainer.appendChild(movieItem);
+      });
+    } else {
+      favoriteMoviesContainer.textContent = 'You have not added any favorite movies yet.';
+    }
+  </script>
+</body>
+
+</html>
